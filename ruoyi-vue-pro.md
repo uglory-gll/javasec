@@ -4,7 +4,7 @@ Longlong Gong
 
 # Project
 
-Address: [ruoyi-vue-pro](https://gitee.com/zhijiantianya/ruoyi-vue-pro/tree/v2.4.1(jdk8/11))
+Address: [ruoyi-vue-pro](https://gitee.com/zhijiantianya/ruoyi-vue-pro)
 
 ## SQL injection
 
