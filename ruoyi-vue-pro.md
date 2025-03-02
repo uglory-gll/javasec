@@ -30,7 +30,7 @@ https://gitee.com/zhijiantianya/ruoyi-vue-pro/archive/refs/tags/v2.4.1(jdk8/11).
 
 [Description]
 
-There is an SQL injection vulnerability in the SQL parameters of the `/report/go view/data/get-by-sql ` interface in the ruoyi vue pro system v2.4.1. Hackers can exploit this vulnerability to obtain sensitive server information
+There is an SQL injection vulnerability in the SQL parameters of the `/report/go-view/data/get-by-sql ` interface in the ruoyi vue pro system v2.4.1. Hackers can exploit this vulnerability to obtain sensitive server information
 
 POC
 
