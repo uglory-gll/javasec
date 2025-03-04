@@ -88,6 +88,7 @@ System Settings ->Data Dictionary ->Modify ->Dynamic SQL, add SQL statements, cl
 
 ![image-20250304234314957](assets/image-20250304234314957.png)
 
+![image-20250304235133799](assets/image-20250304235133799.png)
 maku-boot-v4.7.1\maku-boot-system\src\main\java\net\maku\system\dao\SysDictDataDao.java
 
 ![image-20250304234529278](assets/image-20250304234529278.png)
