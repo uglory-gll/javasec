@@ -6,7 +6,7 @@ Longlong Gong
 
 Address: [maku-boot](https://gitee.com/makunet/maku-boot)
 
-## SQL inject
+## 1、SQL inject
 
 ###  `/sys/dict/type` `/sys/dict/type/list/sql` SQL inject
 
@@ -98,7 +98,7 @@ maku-boot-v4.7.1\maku-boot-system\src\main\java\net\maku\system\dao\SysDictDataD
 
 ![image-20250304234631087](assets/image-20250304234631087.png)
 
-## Stored cross-site scripting
+## 2、Stored cross-site scripting
 
 ###  `/sys/file/upload` Stored cross-site scripting
 
