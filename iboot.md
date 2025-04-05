@@ -86,7 +86,7 @@ https://gitee.com/iteaj/iboot/repository/archive/v1.1.3
 
 [Description]
 
-There is an arbitrary file upload vulnerability in the `/common/upload ` interface of the iboot backend management framework v1.1.3, which allows uploading files with arbitrary suffixes, such as HTML and XSS
+There is an arbitrary file upload vulnerability in the `/common/upload ` interface of the iboot backend management framework v1.1.3, which allows uploading files with arbitrary suffixes, such as HTML-XSS
 
 POC
 
@@ -136,7 +136,7 @@ http://192.168.1.184:8080/img/upload/common/cf8618b7-9ee5-4ffa-b6b9-f6f4c9720039
 
 ![image-20250405172158281](assets/image-20250405172158281.png)
 
-### 2.2、`/common/upload` Arbitrary File Upload
+### 2.2、`/common/upload/batch` Arbitrary File Upload
 
 [Affected version]
 
@@ -146,7 +146,7 @@ v1.1.3
 
 [Affected Component]
 
-/common/upload
+/common/upload/batch
 
 
 
@@ -158,7 +158,7 @@ https://gitee.com/iteaj/iboot/repository/archive/v1.1.3
 
 [Description]
 
-There is an arbitrary file upload vulnerability in the `/common/upload/batch ` interface of the iboot backend management framework v1.1.3, which allows uploading files with arbitrary suffixes, such as HTML and XSS
+There is an arbitrary file upload vulnerability in the `/common/upload/batch ` interface of the iboot backend management framework v1.1.3, which allows uploading files with arbitrary suffixes, such as HTML-XSS
 
 POC
 
