@@ -130,7 +130,7 @@ The file suffixes here are directly concatenated without verification
 
 ![image-20250405172316916](assets/image-20250405172316916.png)
 
-Upload HTML XS and concatenate the path behind the host
+Upload HTML XSS and concatenate the path behind the host
 
 http://192.168.1.184:8080/img/upload/common/cf8618b7-9ee5-4ffa-b6b9-f6f4c9720039.html
 
