@@ -71,7 +71,7 @@ Others can discover XSS issues upon entering the article
 
 ## 2、Logical loopholes
 
-###  2.1、`/user/home?userId=2&homeSelectType=read` View browsing history of others
+###  2.1、`/user/home?userId=1&homeSelectType=read` View browsing history of others
 
 [Affected version]
 
