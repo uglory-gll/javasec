@@ -93,7 +93,7 @@ https://gitee.com/itwanger/paicoding/repository/archive/1.0.3-%E5%BE%AE%E4%BF%A1
 
 [Description]
 
-In Paicoding system v1.0.3, by accessing the "/user/home?userId=2&homeSelectType=read" interface, it is possible to directly read the browsing history of other users, which is not visible in the design and has logical vulnerabilities, posing a threat to user privacy
+In Paicoding system v1.0.3, by accessing the "/user/home?userId=1&homeSelectType=read" interface, it is possible to directly read the browsing history of other users, which is not visible in the design and has logical vulnerabilities, posing a threat to user privacy
 
 POC
 
