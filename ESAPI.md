@@ -58,7 +58,7 @@ Based on the JavaSeclab project that references ESAPI2.2.0.0, there have been no
 
 ![image-20250604203837348](assets/image-20250604203837348.png)
 
-Go to SQL Injection ->JDBC ->Security Scenarios ->Web Security Framework, first enter 1 for querying, and then use id=1% 5c '+and+if (1=1,1,1) for the data packet payload--+
+Go to SQL Injection ->JDBC ->Security Scenarios ->Web Security Framework, first enter 1 for querying, and then use id=1% 5c '+and+if (1=1,sleep(5),1) for the data packet payload--+
 
 ![image-20250604204352340](assets/image-20250604204352340.png)
 
@@ -149,7 +149,7 @@ Statement stmt = conn.createStatement();
 String sql = "select * from sqli where id = '" + ESAPI.encoder().encodeForSQL(mysqlCodec, id) + "'";
 ```
 
-Go to SQL Injection ->JDBC ->Security Scenarios ->Web Security Framework, first enter 1 for querying, and then use id=1% 5c '+and+if (1=1,1,1) for the data packet payload--+
+Go to SQL Injection ->JDBC ->Security Scenarios ->Web Security Framework, first enter 1 for querying, and then use id=1% 5c '+and+if (1=1,sleep(5),1) for the data packet payload--+
 
 ![image-20250604211139210](assets/image-20250604211139210.png)
 
